@@ -65,7 +65,7 @@ public class QuadCopter {
             FileWriter fw = new FileWriter(piBlasterFile.getAbsoluteFile());
             this.commandWriter = new BufferedWriter(fw);
         } catch (IOException e) {
-            System.err.println("Glarus1 can't init itself");
+            System.err.println("[ERROR]Glarus1 can't init itself");
             System.exit(-1);
         }
     }
@@ -160,7 +160,7 @@ public class QuadCopter {
         try {
             String command = String.format("%d=%f", engine.piGpioPin, this.timeForPercentage(throttleInPercentage));
             this.commandWriter.write(command);
-            System.out.println("Command send to esc");
+            System.out.println("[INFO]Command written in pi-blaster");
         } catch (IOException e) {
             // very very bad case, dont want to happen during flight
             success = false;
