@@ -119,10 +119,64 @@ public class QuadCopterController {
         }
     }
 
-    private void sendQuadForwardWithValue(byte value) {
+    private void sendQuadForwardWithValue(byte offsetValue) {
+        this.hover();
+        double throttleValueInHover = QuadCopter.sharedInstance().getBiggestThrottleValue();
+
+        double divisor = Byte.MAX_VALUE / (100 - throttleValueInHover);
+        double offset = Math.abs(offsetValue / divisor);
+
+        double minThrottleValue = throttleValueInHover - QuadCopterController.MAX_RANGE_FACTOR_BETWEEN_MIN_HOVER_THROTTLE_DURING_MANEUVER * offset;
+        double maxThrottleValue = throttleValueInHover + QuadCopterController.MAX_RANGE_FACTOR_BETWEEN_MAX_HOVER_THROTTLE_DURING_MANEUVER * offset;
+
+        while (maxThrottleValue - minThrottleValue > QuadCopterController.MAX_RANGE_OFFSET_BETWEEN_MIN_MAX_THROTTLE_DURING_MANEUVER) {
+            minThrottleValue += 0.5;
+            maxThrottleValue -= 0.5;
+        }
+
+        if (offsetValue > 0) {
+            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(minThrottleValue);
+            QuadCopter.sharedInstance().setEngineFrontRightThrottle(minThrottleValue);
+            QuadCopter.sharedInstance().setEngineRearLeftThrottle(maxThrottleValue);
+            QuadCopter.sharedInstance().setEngineRearRightThrottle(maxThrottleValue);
+        } else if (offsetValue < 0) {
+            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(maxThrottleValue);
+            QuadCopter.sharedInstance().setEngineFrontRightThrottle(maxThrottleValue);
+            QuadCopter.sharedInstance().setEngineRearLeftThrottle(minThrottleValue);
+            QuadCopter.sharedInstance().setEngineRearRightThrottle(minThrottleValue);
+        } else {
+            this.hover();
+        }
     }
 
-    private void rotateQuadClockwiseWithValue(byte value) {
+    private void rotateQuadClockwiseWithValue(byte offsetValue) {
+        this.hover();
+        double throttleValueInHover = QuadCopter.sharedInstance().getBiggestThrottleValue();
+
+        double divisor = Byte.MAX_VALUE / (100 - throttleValueInHover);
+        double offset = Math.abs(offsetValue / divisor);
+
+        double minThrottleValue = throttleValueInHover - QuadCopterController.MAX_RANGE_FACTOR_BETWEEN_MIN_HOVER_THROTTLE_DURING_MANEUVER * offset;
+        double maxThrottleValue = throttleValueInHover + QuadCopterController.MAX_RANGE_FACTOR_BETWEEN_MAX_HOVER_THROTTLE_DURING_MANEUVER * offset;
+
+        while (maxThrottleValue - minThrottleValue > QuadCopterController.MAX_RANGE_OFFSET_BETWEEN_MIN_MAX_THROTTLE_DURING_MANEUVER) {
+            minThrottleValue += 0.5;
+            maxThrottleValue -= 0.5;
+        }
+
+        if (offsetValue > 0) {
+            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(minThrottleValue);
+            QuadCopter.sharedInstance().setEngineRearRightThrottle(minThrottleValue);
+            QuadCopter.sharedInstance().setEngineRearLeftThrottle(maxThrottleValue);
+            QuadCopter.sharedInstance().setEngineFrontRightThrottle(maxThrottleValue);
+        } else if (offsetValue < 0) {
+            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(maxThrottleValue);
+            QuadCopter.sharedInstance().setEngineRearRightThrottle(maxThrottleValue);
+            QuadCopter.sharedInstance().setEngineRearLeftThrottle(minThrottleValue);
+            QuadCopter.sharedInstance().setEngineFrontRightThrottle(minThrottleValue);
+        } else {
+            this.hover();
+        }
     }
 
 }
