@@ -6,7 +6,7 @@
 package firmware.control;
 
 import firmware.control.maneuvers.*;
-import firmware.configuration.ConfigurationHandler;
+import firmware.configuration.ConfigurationManager;
 import firmware.configuration.Configuration;
 
 /**
@@ -38,22 +38,22 @@ public class QuadCopterController {
     }
 
     public void hover() {
-        Configuration storedConfig = ConfigurationHandler.sharedInstance().getStoredConfiguration();
+        Configuration storedConfig = ConfigurationManager.sharedInstance().getStoredConfiguration();
         QuadCopter.sharedInstance().setAllEnginesOnThrottle(storedConfig.hoverThrottlePercentage);
     }
 
     public void calibrateHoverOnePercentUp() {
-        Configuration storedConfig = ConfigurationHandler.sharedInstance().getStoredConfiguration();
+        Configuration storedConfig = ConfigurationManager.sharedInstance().getStoredConfiguration();
         storedConfig.hoverThrottlePercentage++;
         System.out.printf("[WARNING]Hover percentage changed to: %d\n", storedConfig.hoverThrottlePercentage);
-        ConfigurationHandler.sharedInstance().storeConfiguration(storedConfig);
+        ConfigurationManager.sharedInstance().storeConfiguration(storedConfig);
     }
 
     public void calibrateHoverOnePercentDown() {
-        Configuration storedConfig = ConfigurationHandler.sharedInstance().getStoredConfiguration();
+        Configuration storedConfig = ConfigurationManager.sharedInstance().getStoredConfiguration();
         storedConfig.hoverThrottlePercentage--;
         System.out.printf("[WARNING]Hover percentage changed to: %d\n", storedConfig.hoverThrottlePercentage);
-        ConfigurationHandler.sharedInstance().storeConfiguration(storedConfig);
+        ConfigurationManager.sharedInstance().storeConfiguration(storedConfig);
     }
 
     //**************************************************************************
@@ -63,7 +63,7 @@ public class QuadCopterController {
     private void sendQuadUpWithOffsetValue(byte offsetValue) {
         this.hover();
         double throttlePercentageInHover = QuadCopter.sharedInstance().getBiggestThrottleValue();
-        double minPercentageBoundDuringDescent = throttlePercentageInHover - ConfigurationHandler.MIN_BOUND_OFFSET_FROM_HOVER;
+        double minPercentageBoundDuringDescent = throttlePercentageInHover - ConfigurationManager.MIN_BOUND_OFFSET_FROM_HOVER;
         double throttlePercentageRangeFromHoverToMax = 100 - throttlePercentageInHover;
         double throttlePercentageRangeFromMinBoundToHover = throttlePercentageInHover - minPercentageBoundDuringDescent;
 
@@ -96,10 +96,10 @@ public class QuadCopterController {
         double divisor = Byte.MAX_VALUE / (100 - throttleValueInHover);
         double offset = Math.abs(offsetValue / divisor);
 
-        double minThrottleValue = throttleValueInHover - ConfigurationHandler.MAX_RANGE_FACTOR_BETWEEN_MIN_HOVER_THROTTLE_DURING_MANEUVER * offset;
-        double maxThrottleValue = throttleValueInHover + ConfigurationHandler.MAX_RANGE_FACTOR_BETWEEN_MAX_HOVER_THROTTLE_DURING_MANEUVER * offset;
+        double minThrottleValue = throttleValueInHover - ConfigurationManager.MAX_RANGE_FACTOR_BETWEEN_MIN_HOVER_THROTTLE_DURING_MANEUVER * offset;
+        double maxThrottleValue = throttleValueInHover + ConfigurationManager.MAX_RANGE_FACTOR_BETWEEN_MAX_HOVER_THROTTLE_DURING_MANEUVER * offset;
 
-        while (maxThrottleValue - minThrottleValue > ConfigurationHandler.MAX_RANGE_OFFSET_BETWEEN_MIN_MAX_THROTTLE_DURING_MANEUVER) {
+        while (maxThrottleValue - minThrottleValue > ConfigurationManager.MAX_RANGE_OFFSET_BETWEEN_MIN_MAX_THROTTLE_DURING_MANEUVER) {
             minThrottleValue += 0.5;
             maxThrottleValue -= 0.5;
         }
@@ -126,10 +126,10 @@ public class QuadCopterController {
         double divisor = Byte.MAX_VALUE / (100 - throttleValueInHover);
         double offset = Math.abs(offsetValue / divisor);
 
-        double minThrottleValue = throttleValueInHover - ConfigurationHandler.MAX_RANGE_FACTOR_BETWEEN_MIN_HOVER_THROTTLE_DURING_MANEUVER * offset;
-        double maxThrottleValue = throttleValueInHover + ConfigurationHandler.MAX_RANGE_FACTOR_BETWEEN_MAX_HOVER_THROTTLE_DURING_MANEUVER * offset;
+        double minThrottleValue = throttleValueInHover - ConfigurationManager.MAX_RANGE_FACTOR_BETWEEN_MIN_HOVER_THROTTLE_DURING_MANEUVER * offset;
+        double maxThrottleValue = throttleValueInHover + ConfigurationManager.MAX_RANGE_FACTOR_BETWEEN_MAX_HOVER_THROTTLE_DURING_MANEUVER * offset;
 
-        while (maxThrottleValue - minThrottleValue > ConfigurationHandler.MAX_RANGE_OFFSET_BETWEEN_MIN_MAX_THROTTLE_DURING_MANEUVER) {
+        while (maxThrottleValue - minThrottleValue > ConfigurationManager.MAX_RANGE_OFFSET_BETWEEN_MIN_MAX_THROTTLE_DURING_MANEUVER) {
             minThrottleValue += 0.5;
             maxThrottleValue -= 0.5;
         }
@@ -156,10 +156,10 @@ public class QuadCopterController {
         double divisor = Byte.MAX_VALUE / (100 - throttleValueInHover);
         double offset = Math.abs(offsetValue / divisor);
 
-        double minThrottleValue = throttleValueInHover - ConfigurationHandler.MAX_RANGE_FACTOR_BETWEEN_MIN_HOVER_THROTTLE_DURING_MANEUVER * offset;
-        double maxThrottleValue = throttleValueInHover + ConfigurationHandler.MAX_RANGE_FACTOR_BETWEEN_MAX_HOVER_THROTTLE_DURING_MANEUVER * offset;
+        double minThrottleValue = throttleValueInHover - ConfigurationManager.MAX_RANGE_FACTOR_BETWEEN_MIN_HOVER_THROTTLE_DURING_MANEUVER * offset;
+        double maxThrottleValue = throttleValueInHover + ConfigurationManager.MAX_RANGE_FACTOR_BETWEEN_MAX_HOVER_THROTTLE_DURING_MANEUVER * offset;
 
-        while (maxThrottleValue - minThrottleValue > ConfigurationHandler.MAX_RANGE_OFFSET_BETWEEN_MIN_MAX_THROTTLE_DURING_MANEUVER) {
+        while (maxThrottleValue - minThrottleValue > ConfigurationManager.MAX_RANGE_OFFSET_BETWEEN_MIN_MAX_THROTTLE_DURING_MANEUVER) {
             minThrottleValue += 0.5;
             maxThrottleValue -= 0.5;
         }

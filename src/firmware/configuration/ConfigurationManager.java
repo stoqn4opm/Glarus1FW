@@ -15,7 +15,7 @@ import java.io.ObjectOutputStream;
  *
  * @author stoqn
  */
-public class ConfigurationHandler {
+public class ConfigurationManager {
 
     private Configuration config;
 
@@ -39,14 +39,14 @@ public class ConfigurationHandler {
     //**************************************************************************
     // Singleton's sharedInstance
     //**************************************************************************
-    private static ConfigurationHandler instance = null;
+    private static ConfigurationManager instance = null;
 
     // Lazy Initialization (If required then only)
-    public static ConfigurationHandler sharedInstance() {
+    public static ConfigurationManager sharedInstance() {
         // Thread Safe. Might be costly operation in some case
-        synchronized (ConfigurationHandler.class) {
+        synchronized (ConfigurationManager.class) {
             if (instance == null) {
-                instance = new ConfigurationHandler();
+                instance = new ConfigurationManager();
             }
         }
         return instance;
