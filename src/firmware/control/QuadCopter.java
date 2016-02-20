@@ -9,6 +9,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 enum Engines {
 
@@ -47,7 +49,6 @@ public class QuadCopter {
     //**************************************************************************
     // Constructors
     //**************************************************************************
-    
     public QuadCopter() {
         File piBlasterFile = new File(QuadCopter.PI_BLASTER_FIFO);
         try {
@@ -56,11 +57,14 @@ public class QuadCopter {
             }
             FileWriter fw = new FileWriter(piBlasterFile.getAbsoluteFile());
             this.commandWriter = new BufferedWriter(fw);
+            this.setAllEnginesOnThrottle(0);
+            Thread.sleep(5000);
         } catch (IOException e) {
             System.err.println("[ERROR]Glarus1 can't init itself");
             System.exit(-1);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(QuadCopter.class.getName()).log(Level.SEVERE, null, ex);
         }
-        this.setAllEnginesOnThrottle(0);
     }
 
     //**************************************************************************
