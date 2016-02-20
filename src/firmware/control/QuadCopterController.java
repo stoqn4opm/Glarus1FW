@@ -15,6 +15,12 @@ import firmware.configuration.Configuration;
  */
 public class QuadCopterController {
 
+    private final QuadCopter quad;
+    
+    public QuadCopterController () {
+        this.quad = new QuadCopter();
+    }
+    
     //**************************************************************************
     // Public interface
     //**************************************************************************
@@ -39,7 +45,7 @@ public class QuadCopterController {
 
     public void hover() {
         Configuration storedConfig = ConfigurationManager.sharedInstance().getStoredConfiguration();
-        QuadCopter.sharedInstance().setAllEnginesOnThrottle(storedConfig.hoverThrottlePercentage);
+        this.quad.setAllEnginesOnThrottle(storedConfig.hoverThrottlePercentage);
     }
 
     public void calibrateHoverOnePercentUp() {
@@ -58,7 +64,7 @@ public class QuadCopterController {
 
     public void stopAllEngines() {
         System.out.println("[WARNING]Stopping all engines");
-        QuadCopter.sharedInstance().setAllEnginesOnThrottle(0);
+        this.quad.setAllEnginesOnThrottle(0);
     }
 
     //**************************************************************************
@@ -68,7 +74,7 @@ public class QuadCopterController {
 
     private void sendQuadUpWithOffsetValue(byte offsetValue) {
         this.hover();
-        double throttlePercentageInHover = QuadCopter.sharedInstance().getBiggestThrottleValue();
+        double throttlePercentageInHover = this.quad.getBiggestThrottleValue();
         double minPercentageBoundDuringDescent = throttlePercentageInHover - ConfigurationManager.MIN_BOUND_OFFSET_FROM_HOVER;
         double throttlePercentageRangeFromHoverToMax = 100 - throttlePercentageInHover;
         double throttlePercentageRangeFromMinBoundToHover = throttlePercentageInHover - minPercentageBoundDuringDescent;
@@ -92,12 +98,12 @@ public class QuadCopterController {
         }
 
         offsetValue /= divisor;
-        QuadCopter.sharedInstance().setAllEnginesOnThrottle(throttlePercentageInHover + offsetValue);
+        this.quad.setAllEnginesOnThrottle(throttlePercentageInHover + offsetValue);
     }
 
     private void sendQuadLeftWithValue(byte offsetValue) {
         this.hover();
-        double throttleValueInHover = QuadCopter.sharedInstance().getBiggestThrottleValue();
+        double throttleValueInHover = this.quad.getBiggestThrottleValue();
 
         double divisor = Byte.MAX_VALUE / (100 - throttleValueInHover);
         double offset = Math.abs(offsetValue / divisor);
@@ -111,15 +117,15 @@ public class QuadCopterController {
         }
 
         if (offsetValue > 0) {
-            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearLeftThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineFrontRightThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearRightThrottle(maxThrottleValue);
+            this.quad.setEngineFrontLeftThrottle(minThrottleValue);
+            this.quad.setEngineRearLeftThrottle(minThrottleValue);
+            this.quad.setEngineFrontRightThrottle(maxThrottleValue);
+            this.quad.setEngineRearRightThrottle(maxThrottleValue);
         } else if (offsetValue < 0) {
-            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearLeftThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineFrontRightThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearRightThrottle(minThrottleValue);
+            this.quad.setEngineFrontLeftThrottle(maxThrottleValue);
+            this.quad.setEngineRearLeftThrottle(maxThrottleValue);
+            this.quad.setEngineFrontRightThrottle(minThrottleValue);
+            this.quad.setEngineRearRightThrottle(minThrottleValue);
         } else {
             this.hover();
         }
@@ -127,7 +133,7 @@ public class QuadCopterController {
 
     private void sendQuadForwardWithValue(byte offsetValue) {
         this.hover();
-        double throttleValueInHover = QuadCopter.sharedInstance().getBiggestThrottleValue();
+        double throttleValueInHover = this.quad.getBiggestThrottleValue();
 
         double divisor = Byte.MAX_VALUE / (100 - throttleValueInHover);
         double offset = Math.abs(offsetValue / divisor);
@@ -141,15 +147,15 @@ public class QuadCopterController {
         }
 
         if (offsetValue > 0) {
-            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineFrontRightThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearLeftThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearRightThrottle(maxThrottleValue);
+            this.quad.setEngineFrontLeftThrottle(minThrottleValue);
+            this.quad.setEngineFrontRightThrottle(minThrottleValue);
+            this.quad.setEngineRearLeftThrottle(maxThrottleValue);
+            this.quad.setEngineRearRightThrottle(maxThrottleValue);
         } else if (offsetValue < 0) {
-            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineFrontRightThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearLeftThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearRightThrottle(minThrottleValue);
+            this.quad.setEngineFrontLeftThrottle(maxThrottleValue);
+            this.quad.setEngineFrontRightThrottle(maxThrottleValue);
+            this.quad.setEngineRearLeftThrottle(minThrottleValue);
+            this.quad.setEngineRearRightThrottle(minThrottleValue);
         } else {
             this.hover();
         }
@@ -157,7 +163,7 @@ public class QuadCopterController {
 
     private void rotateQuadClockwiseWithValue(byte offsetValue) {
         this.hover();
-        double throttleValueInHover = QuadCopter.sharedInstance().getBiggestThrottleValue();
+        double throttleValueInHover = this.quad.getBiggestThrottleValue();
 
         double divisor = Byte.MAX_VALUE / (100 - throttleValueInHover);
         double offset = Math.abs(offsetValue / divisor);
@@ -171,15 +177,15 @@ public class QuadCopterController {
         }
 
         if (offsetValue > 0) {
-            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearRightThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearLeftThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineFrontRightThrottle(maxThrottleValue);
+            this.quad.setEngineFrontLeftThrottle(minThrottleValue);
+            this.quad.setEngineRearRightThrottle(minThrottleValue);
+            this.quad.setEngineRearLeftThrottle(maxThrottleValue);
+            this.quad.setEngineFrontRightThrottle(maxThrottleValue);
         } else if (offsetValue < 0) {
-            QuadCopter.sharedInstance().setEngineFrontLeftThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearRightThrottle(maxThrottleValue);
-            QuadCopter.sharedInstance().setEngineRearLeftThrottle(minThrottleValue);
-            QuadCopter.sharedInstance().setEngineFrontRightThrottle(minThrottleValue);
+            this.quad.setEngineFrontLeftThrottle(maxThrottleValue);
+            this.quad.setEngineRearRightThrottle(maxThrottleValue);
+            this.quad.setEngineRearLeftThrottle(minThrottleValue);
+            this.quad.setEngineFrontRightThrottle(minThrottleValue);
         } else {
             this.hover();
         }

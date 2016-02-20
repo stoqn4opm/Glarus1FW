@@ -46,20 +46,10 @@ public class QuadCopter {
     private double engineRearRightThrottle;
 
     //**************************************************************************
-    // Singleton's sharedInstance
+    // Constructors
     //**************************************************************************
-    // Lazy Initialization (If required then only)
-    public static QuadCopter sharedInstance() {
-        // Thread Safe. Might be costly operation in some case
-        synchronized (QuadCopter.class) {
-            if (instance == null) {
-                instance = new QuadCopter();
-            }
-        }
-        return instance;
-    }
-
-    private QuadCopter() {
+    
+    public QuadCopter() {
         File piBlasterFile = new File(QuadCopter.PI_BLASTER_FIFO);
         try {
             if (!piBlasterFile.exists()) {
