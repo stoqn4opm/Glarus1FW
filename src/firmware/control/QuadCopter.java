@@ -32,8 +32,8 @@ enum Engines {
  */
 public class QuadCopter {
 
-    //private static final String PI_BLASTER_FIFO = "/dev/pi-blaster";
-    private static final String PI_BLASTER_FIFO = "pi-blaster.test";
+    private static final String PI_BLASTER_FIFO = "/dev/pi-blaster";
+    //private static final String PI_BLASTER_FIFO = "pi-blaster.test";
     private static final double ENGINE_PWM_TIMING_LOW = 0.05; // here the engine is at min throttle
     private static final double ENGINE_PWM_TIMING_HIGH = 0.1; // here the engine is at full throttle
 
