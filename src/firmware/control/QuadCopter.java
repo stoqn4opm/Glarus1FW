@@ -12,15 +12,17 @@ import java.io.IOException;
 
 enum Engines {
 
-    ENGINE_FRONT_LEFT(17),
-    ENGINE_FRONT_RIGHT(18),
-    ENGINE_REAR_LEFT(21),
-    ENGINE_REAR_RIGHT(22);
+    ENGINE_FRONT_LEFT(17, "F_LEFT"),
+    ENGINE_FRONT_RIGHT(18, "F_RIGHT"),
+    ENGINE_REAR_LEFT(21, "R_LEFT"),
+    ENGINE_REAR_RIGHT(22, "R_RIGHT");
 
     public int piGpioPin;
+    public String name;
 
-    Engines(int pin) {
+    Engines(int pin, String name) {
         this.piGpioPin = pin;
+        this.name = name;
     }
 }
 
@@ -30,7 +32,8 @@ enum Engines {
  */
 public class QuadCopter {
 
-    private static final String PI_BLASTER_FIFO = "/dev/pi-blaster";
+    //private static final String PI_BLASTER_FIFO = "/dev/pi-blaster";
+    private static final String PI_BLASTER_FIFO = "pi-blaster.test";
     private static final double ENGINE_PWM_TIMING_LOW = 0.05; // here the engine is at min throttle
     private static final double ENGINE_PWM_TIMING_HIGH = 0.1; // here the engine is at full throttle
 
@@ -68,6 +71,7 @@ public class QuadCopter {
             System.err.println("[ERROR]Glarus1 can't init itself");
             System.exit(-1);
         }
+        this.setAllEnginesOnThrottle(0);
     }
 
     //**************************************************************************
@@ -129,7 +133,7 @@ public class QuadCopter {
         this.trySendCommandToESCs(Engines.ENGINE_REAR_RIGHT, engineRearRightThrottle);
     }
 
-    public void setAllEnginesOnThrottle(double throttlePercentage) {
+    public final void setAllEnginesOnThrottle(double throttlePercentage) {
         this.setEngineFrontLeftThrottle(throttlePercentage);
         this.setEngineFrontRightThrottle(throttlePercentage);
         this.setEngineRearLeftThrottle(throttlePercentage);
@@ -158,9 +162,11 @@ public class QuadCopter {
     private boolean trySendCommandToESCs(Engines engine, double throttleInPercentage) {
         boolean success = true;
         try {
-            String command = String.format("%d=%f", engine.piGpioPin, this.timeForPercentage(throttleInPercentage));
+            String command = String.format("%d=%f%n", engine.piGpioPin, this.timeForPercentage(throttleInPercentage));
             this.commandWriter.write(command);
-            System.out.println("[INFO]Command written in pi-blaster");
+            this.commandWriter.flush();
+
+            System.out.printf("[INFO]Command send to ESC's - %s:\t%.2f\n", engine.name, throttleInPercentage);
         } catch (IOException e) {
             // very very bad case, dont want to happen during flight
             success = false;

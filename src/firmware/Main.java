@@ -5,6 +5,8 @@
  */
 package firmware;
 
+import firmware.control.QuadCopterController;
+
 /**
  *
  * @author stoqn
@@ -12,6 +14,10 @@ package firmware;
 public class Main {
 
     public static void main(String[] args) {
-
+        QuadCopterController quadController = new QuadCopterController();
+        quadController.hover();
+        quadController.calibrateHoverOnePercentUp();
+        quadController.hover();
+        quadController.stopAllEngines();
     }
 }

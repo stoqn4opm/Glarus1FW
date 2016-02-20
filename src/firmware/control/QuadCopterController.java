@@ -45,21 +45,27 @@ public class QuadCopterController {
     public void calibrateHoverOnePercentUp() {
         Configuration storedConfig = ConfigurationManager.sharedInstance().getStoredConfiguration();
         storedConfig.hoverThrottlePercentage++;
-        System.out.printf("[WARNING]Hover percentage changed to: %d\n", storedConfig.hoverThrottlePercentage);
+        System.out.printf("[WARNING]Hover percentage changed to: %.2f\n", storedConfig.hoverThrottlePercentage);
         ConfigurationManager.sharedInstance().storeConfiguration(storedConfig);
     }
 
     public void calibrateHoverOnePercentDown() {
         Configuration storedConfig = ConfigurationManager.sharedInstance().getStoredConfiguration();
         storedConfig.hoverThrottlePercentage--;
-        System.out.printf("[WARNING]Hover percentage changed to: %d\n", storedConfig.hoverThrottlePercentage);
+        System.out.printf("[WARNING]Hover percentage changed to: %.2f\n", storedConfig.hoverThrottlePercentage);
         ConfigurationManager.sharedInstance().storeConfiguration(storedConfig);
+    }
+
+    public void stopAllEngines() {
+        System.out.println("[WARNING]Stopping all engines");
+        QuadCopter.sharedInstance().setAllEnginesOnThrottle(0);
     }
 
     //**************************************************************************
     // Private Methods
     //**************************************************************************
     // Quad Maneuvers ----------------------------------------------------------
+
     private void sendQuadUpWithOffsetValue(byte offsetValue) {
         this.hover();
         double throttlePercentageInHover = QuadCopter.sharedInstance().getBiggestThrottleValue();

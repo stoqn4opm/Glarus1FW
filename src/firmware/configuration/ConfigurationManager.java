@@ -86,11 +86,11 @@ public class ConfigurationManager {
             out.writeObject(config);
             out.close();
             fileOut.close();
-            System.out.printf("Configuration is saved in: %f", CONFIGURATION_FILE);
+            System.out.printf("[INFO]Configuration is saved in: %s\n", CONFIGURATION_FILE);
         } catch (IOException i) {
             System.err.printf("[WARNING]Configuration save failed,"
                     + " and will not persist during relaunching of the program."
-                    + "\nMake sure you have write permission in %f", CONFIGURATION_FILE);
+                    + "\nMake sure you have write permission in %s", CONFIGURATION_FILE);
         }
     }
 }
