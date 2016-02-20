@@ -6,6 +6,8 @@
 package firmware;
 
 import firmware.control.QuadCopterController;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,10 +16,19 @@ import firmware.control.QuadCopterController;
 public class Main {
 
     public static void main(String[] args) {
-        QuadCopterController quadController = new QuadCopterController();
-        quadController.hover();
-        quadController.calibrateHoverOnePercentUp();
-        quadController.hover();
-        quadController.stopAllEngines();
+        try {
+            QuadCopterController quadController = new QuadCopterController();
+            quadController.hover();
+            Thread.sleep(1000);
+            quadController.calibrateHoverOnePercentUp();
+            quadController.hover();
+            Thread.sleep(1000);
+            quadController.calibrateHoverOnePercentDown();
+            quadController.hover();
+            Thread.sleep(1000);
+            quadController.stopAllEngines();
+        } catch (InterruptedException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

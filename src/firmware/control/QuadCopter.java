@@ -38,7 +38,6 @@ public class QuadCopter {
     private static final double ENGINE_PWM_TIMING_HIGH = 0.1; // here the engine is at full throttle
 
     private BufferedWriter commandWriter;
-    private static QuadCopter instance = null;
 
     private double engineFrontLeftThrottle;
     private double engineFrontRightThrottle;
